@@ -9,11 +9,12 @@ import ResultsTable from "./components/ResultsTable";
 import PresetQueries from "./components/PresetQueries";
 import { initializeDatabase, executeQuery } from "./utils/sqlUtils";
 import "./App.css";
+import ERDiagramPage from "./components/ERDiagramPage";
 
 const queryClient = new QueryClient();
 
 const Index = () => {
-  const [query, setQuery] = useState("SELECT * FROM products");
+  const [query, setQuery] = useState("SELECT * FROM categories");
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +51,8 @@ const Index = () => {
 
   const handleSelectPresetQuery = (presetQuery) => {
     setQuery(presetQuery);
-    setTimeout(handleRunQuery, 100);
+    setResults(null); // Reset results to null
+    setError(null); // Reset error to null
   };
 
   return (
@@ -86,6 +88,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/er-diagram" element={<ERDiagramPage />} />
         </Routes>
       </BrowserRouter>
   </QueryClientProvider>

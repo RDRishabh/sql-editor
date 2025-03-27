@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { exportToCSV, exportToJSON } from '../utils/sqlUtils';
 import '../styles/ResultsTable.css';
 
 const ResultsTable = ({ results, error, isLoading }) => {
   const [sortColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState(null); // Now allows null to remove sorting
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
 
-  const sortedResults = React.useMemo(() => {
-    if (!results) return [];
+  // Reset pagination when results change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [results]);
 
-    if (sortColumn) {
-      return [...results].sort((a, b) => {
+  // Filter out rows where all columns are null or undefined
+  const filteredResults = results?.filter(row => 
+    Object.values(row).some(value => value !== null && value !== undefined && value !== '')
+  ) || [];
+  
+  const sortedResults = React.useMemo(() => {
+    if (!filteredResults.length) return [];
+
+    if (sortColumn && sortDirection) {
+      return [...filteredResults].sort((a, b) => {
         const valueA = a[sortColumn];
         const valueB = b[sortColumn];
-
+    
+        // Handle empty or null values by treating them as greater than other values
+        if (valueA === null || valueA === undefined || valueA === '') return 1;
+        if (valueB === null || valueB === undefined || valueB === '') return -1;
+    
+        // Perform comparison for non-empty values
         if (typeof valueA === 'string' && typeof valueB === 'string') {
           return sortDirection === 'asc' 
             ? valueA.localeCompare(valueB) 
@@ -28,32 +43,37 @@ const ResultsTable = ({ results, error, isLoading }) => {
       });
     }
 
-    return results;
-  }, [results, sortColumn, sortDirection]);
+    return filteredResults;
+  }, [filteredResults, sortColumn, sortDirection]);
 
   const handleSort = (column) => {
     if (sortColumn === column) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      if (sortDirection === 'asc') {
+        setSortDirection('desc');
+      } else if (sortDirection === 'desc') {
+        setSortColumn(null);
+        setSortDirection(null); // Remove sorting on the third click
+      }
     } else {
       setSortColumn(column);
       setSortDirection('asc');
     }
   };
 
-  const totalPages = results ? Math.ceil(results.length / rowsPerPage) : 0;
+  const totalPages = Math.ceil(sortedResults.length / rowsPerPage);
   const paginatedResults = sortedResults.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
 
-  const columns = results && results.length > 0 ? Object.keys(results[0]) : [];
+  const columns = filteredResults.length > 0 ? Object.keys(filteredResults[0]) : [];
 
   const handleExportCSV = () => {
-    if (results) exportToCSV(results);
+    if (filteredResults) exportToCSV(filteredResults);
   };
 
   const handleExportJSON = () => {
-    if (results) exportToJSON(results);
+    if (filteredResults) exportToJSON(filteredResults);
   };
 
   if (isLoading) {
@@ -73,7 +93,7 @@ const ResultsTable = ({ results, error, isLoading }) => {
     );
   }
 
-  if (!results || results.length === 0) {
+  if (!filteredResults.length) {
     return (
       <div className="no-results">
         <p>No results to display. Run a query to see results here.</p>
@@ -84,7 +104,7 @@ const ResultsTable = ({ results, error, isLoading }) => {
   return (
     <div className="results-container">
       <div className="results-header">
-        <h2 className="results-title">Results ({results.length} rows)</h2>
+        <h2 className="results-title">Results ({filteredResults.length} rows)</h2>
         <div className="export-buttons">
           <button className="export-btn" onClick={handleExportCSV}>
             Export CSV
@@ -102,8 +122,12 @@ const ResultsTable = ({ results, error, isLoading }) => {
               {columns.map(column => (
                 <th key={column} onClick={() => handleSort(column)} className="sortable-header">
                   <div className="header-content">
-                    {column}
-                    {sortColumn === column && <span>{sortDirection === 'asc' ? ' ↑' : ' ↓'}</span>}
+                    <span>{column}</span>
+                    {sortColumn === column && (
+                      <span className="sort-arrow">
+                        {sortDirection === 'asc' ? '↑' : sortDirection === 'desc' ? '↓' : ''}
+                      </span>
+                    )}
                   </div>
                 </th>
               ))}
@@ -114,7 +138,7 @@ const ResultsTable = ({ results, error, isLoading }) => {
               <tr key={rowIndex}>
                 {columns.map(column => (
                   <td key={column}>
-                    {row[column] !== null && row[column] !== undefined ? String(row[column]) : 'NULL'}
+                    {row[column] !== null && row[column] !== undefined ? String(row[column]) : ''}
                   </td>
                 ))}
               </tr>
@@ -126,7 +150,7 @@ const ResultsTable = ({ results, error, isLoading }) => {
       {totalPages > 1 && (
         <div className="pagination">
           <div className="pagination-info">
-            Showing {(currentPage - 1) * rowsPerPage + 1} to {Math.min(currentPage * rowsPerPage, results.length)} of {results.length} rows
+            Showing {(currentPage - 1) * rowsPerPage + 1} to {Math.min(currentPage * rowsPerPage, filteredResults.length)} of {filteredResults.length} rows
           </div>
           <div className="pagination-controls">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(page => Math.max(1, page - 1))}>
