@@ -1,0 +1,43 @@
+.query-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  opacity: 0;
+  animation: scaleIn 0.5s forwards;
+}
+
+.monaco-editor-container {
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.query-editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.query-editor-hint {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.query-editor-button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.query-editor-button:hover {
+  background-color: #0056b3;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
