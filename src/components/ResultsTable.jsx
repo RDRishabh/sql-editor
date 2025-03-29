@@ -6,12 +6,12 @@ const ResultsTable = ({ results, error, isLoading }) => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState(null); // Now allows null to remove sorting
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Dynamic rows per page
 
-  // Reset pagination when results change
+  // Reset pagination when results or rowsPerPage change
   useEffect(() => {
     setCurrentPage(1);
-  }, [results]);
+  }, [results, rowsPerPage]);
 
   // Filter out rows where all columns are null or undefined
   const filteredResults = results?.filter(row => 
@@ -105,13 +105,27 @@ const ResultsTable = ({ results, error, isLoading }) => {
     <div className="results-container">
       <div className="results-header">
         <h2 className="results-title">Results ({filteredResults.length} rows)</h2>
-        <div className="export-buttons">
-          <button className="export-btn" onClick={handleExportCSV}>
-            Export CSV
-          </button>
-          <button className="export-btn" onClick={handleExportJSON}>
-            Export JSON
-          </button>
+        <div className="header-controls">
+          <div className="rows-dropdown">
+            <label htmlFor="rowsPerPage">Rows per page:</label>
+            <select
+              id="rowsPerPage"
+              value={rowsPerPage}
+              onChange={(e) => setRowsPerPage(Number(e.target.value))}
+            >
+              <option value={10}>10</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
+          <div className="export-buttons">
+            <button className="export-btn" onClick={handleExportCSV}>
+              Export CSV
+            </button>
+            <button className="export-btn" onClick={handleExportJSON}>
+              Export JSON
+            </button>
+          </div>
         </div>
       </div>
 
@@ -123,11 +137,11 @@ const ResultsTable = ({ results, error, isLoading }) => {
                 <th key={column} onClick={() => handleSort(column)} className="sortable-header">
                   <div className="header-content">
                     <span>{column}</span>
-                    {sortColumn === column && (
-                      <span className="sort-arrow">
-                        {sortDirection === 'asc' ? '↑' : sortDirection === 'desc' ? '↓' : ''}
-                      </span>
-                    )}
+                    <span className="sort-indicator">
+                      {sortColumn === column ? 
+                        (sortDirection === 'asc' ? '↑' : '↓') : 
+                        '\u00A0' /* Non-breaking space to preserve width */}
+                    </span>
                   </div>
                 </th>
               ))}

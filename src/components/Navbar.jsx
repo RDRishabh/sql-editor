@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Ensure you're using React Router for navigation
+import { Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ onSwitchMode, currentMode }) => {
   return (
     <nav className="navbar">
       <div className="navbar-title fade-in" style={{ animationDelay: '0.1s' }}>
@@ -19,13 +19,6 @@ const Navbar = () => {
         >
           View on GitHub
         </a>
-        <Link
-          to="/er-diagram" // Route for the ER Diagram page
-          className="slide-right button button-primary"
-          style={{ animationDelay: '0.4s', marginLeft: '1rem' }}
-        >
-          View ER Diagram
-        </Link>
       </div>
     </nav>
   );

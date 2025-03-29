@@ -14,6 +14,39 @@
 .results-title {
   font-size: 1.25rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.rows-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rows-dropdown label {
+  font-size: 0.875rem;
+}
+
+.rows-dropdown select {
+  padding: 5px 10px;
+  font-size: 0.875rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+  transition: background-color 0.3s;
+}
+
+.rows-dropdown select:hover {
+  background: #f5f5f5;
 }
 
 .export-buttons {
@@ -56,12 +89,25 @@
   background: #e0e0e0;
 }
 
-.results-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.sortable-header .header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sort-indicator {
+  display: inline-block;
+  width: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  margin-left: 8px;
+  visibility: visible; /* Always visible to maintain spacing */
 }
 
 .results-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -129,16 +175,4 @@
 .loading-text {
   font-size: 1rem;
   font-weight: medium;
-}
-
-.sortable-header .header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.sort-arrow {
-  margin-left: 8px;
-  font-size: 12px;
-  color: #666;
 }

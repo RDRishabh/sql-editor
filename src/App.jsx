@@ -9,7 +9,6 @@ import ResultsTable from "./components/ResultsTable";
 import PresetQueries from "./components/PresetQueries";
 import { initializeDatabase, executeQuery } from "./utils/sqlUtils";
 import "./App.css";
-import ERDiagramPage from "./components/ERDiagramPage";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +17,7 @@ const Index = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [queryMode, setQueryMode] = useState("sql"); // 'sql' or 'natural'
 
   useEffect(() => {
     initializeDatabase();
@@ -57,16 +57,20 @@ const Index = () => {
 
   return (
     <div className="app-container">
-      <Navbar />
+      <Navbar onSwitchMode={setQueryMode} currentMode={queryMode} />
       <div className="main-content">
         <div className="sidebar">
           <PresetQueries onSelectQuery={handleSelectPresetQuery} />
         </div>
         <div className="editor-container">
           <section className="query-editor">
-            <h2>SQL Query Editor</h2>
-            <QueryEditor query={query} onQueryChange={handleQueryChange} onRunQuery={handleRunQuery} />
-            <button className="run-query-button" onClick={handleRunQuery}>Run Query</button>
+            
+            
+            
+          <h2>SQL Query Editor</h2>
+          <QueryEditor query={query} onQueryChange={handleQueryChange} onRunQuery={handleRunQuery} />
+          <button className="run-query-button" onClick={handleRunQuery}>Run Query</button>
+              
           </section>
           <section className="results-table">
             <ResultsTable results={results} error={error} isLoading={isLoading} />
@@ -84,13 +88,12 @@ const Index = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/er-diagram" element={<ERDiagramPage />} />
-        </Routes>
-      </BrowserRouter>
+    <Toaster />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+      </Routes>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 
