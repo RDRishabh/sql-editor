@@ -17,6 +17,18 @@
   letter-spacing: -0.02em;
 }
 
+.navbar-title{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;  
+}
+
+.logo{
+  width: 30px;
+  height: 30px;
+  margin-right: 0.5rem;
+}
+
 .navbar-links {
   display: flex;
   align-items: center;

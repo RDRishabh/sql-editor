@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -88,7 +86,6 @@ const Index = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <Toaster />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />

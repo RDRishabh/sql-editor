@@ -6,6 +6,7 @@ const Navbar = ({ onSwitchMode, currentMode }) => {
   return (
     <nav className="navbar">
       <div className="navbar-title fade-in" style={{ animationDelay: '0.1s' }}>
+        <img src="/svgviewer-png-output.png" alt="" className='logo'/>
         <h1>SQL Query Interface</h1>
       </div>
 
