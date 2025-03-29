@@ -105,7 +105,6 @@ body {
     flex-direction: column;
   }
   .sidebar {
-    width: 100%;
     flex: auto;
   }
   .editor-container {

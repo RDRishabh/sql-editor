@@ -19,7 +19,7 @@ const loadCSV = async (filePath) => {
 // Initialize the database with CSV data
 export const initializeDatabase = async () => {
   // Drop existing tables if they exist
-  const tableNames = ['categories', 'customers', 'employees', 'employee_territories', 'products', 'orders', 'orderDetails'];
+  const tableNames = ['categories', 'customers', 'employees', 'employee_territories', 'products', 'orders', 'order_details', 'suppliers', 'territories', 'regions', 'shippers'];
   tableNames.forEach(table => alasql(`DROP TABLE IF EXISTS ${table}`));
 
   // Define table schemas and load CSV files
@@ -80,11 +80,15 @@ export const initializeDatabase = async () => {
       filePath: '/csv/shippers.csv'
     }
   ];
-  
+
   // Load data and create tables
   for (const { name, schema, filePath } of tables) {
     const data = await loadCSV(filePath);
-    alasql(`CREATE TABLE ${name} (${schema})`);
+
+    // Safely create table with IF NOT EXISTS
+    alasql(`CREATE TABLE IF NOT EXISTS ${name} (${schema})`);
+    
+    // Replace table data if it already exists
     alasql.tables[name].data = data;
   }
 };
