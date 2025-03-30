@@ -45,6 +45,30 @@ The **SQL Query Interface** is a web application designed to provide users with 
 - **CI/CD**: Git/GitHub
 - **Deployment**: Vercel
 
+# External Libraries Used
+
+### Dependencies
+- `@monaco-editor/react` - Code editor for SQL query editing.
+- `@tanstack/react-query` - Data fetching and state management.
+- `alasql` - SQL execution within the browser.
+- `file-saver` - Enables file exports (CSV, JSON).
+- `lucide-react` - Icon library for UI elements.
+- `openai` - Placeholder for AI-based features (if applicable).
+- `react` - Core library for building the UI.
+- `react-dom` - React's DOM renderer.
+- `react-hot-toast` - Notification system for UI feedback.
+- `react-router-dom` - Routing and navigation within the app.
+
+### DevDependencies
+- `@eslint/js` - Linting rules for JavaScript.
+- `@types/react` & `@types/react-dom` - Type definitions for React.
+- `@vitejs/plugin-react` - Plugin for React with Vite.
+- `eslint` - Linter for code quality.
+- `eslint-plugin-react-hooks` - Ensures proper use of React Hooks.
+- `eslint-plugin-react-refresh` - Optimizes React refresh during development.
+- `globals` - Provides globally recognized variables.
+- `vite` - Fast development server and build tool.
+
 ## Target Users
 - **Data Engineers**
 - **Business Analysts**
